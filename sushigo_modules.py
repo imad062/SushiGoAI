@@ -57,7 +57,12 @@ class GameState(object):
 
         _p2_table : list
 
-        
+        _p1_total_score : int
+
+        _p2_total_score : int
+
+        ----------
+
     """
     def __init__(self):
         cardDeck = CardDeck()
@@ -66,11 +71,34 @@ class GameState(object):
         self._p1_total_score, self._p2_total_score = 0, 0
 
     def getTotalScores(self):
+        """
+            Getter function for the players' scores.
+
+            Return
+            ------
+            (_p1_total_score, _p2_total_score) : tuple
+                The tuple contating the score of the two players. 
+            ------
+        """
         return self._p1_total_score, self._p2_total_score
 
 
     def getWinningStatement(self, winstr):
         """
+            Returns a random quirky winning sentence.
+
+            Parameters
+            ----------
+            winstr : str
+                String containing the name of the winning player.
+            ----------
+
+            Return
+            ------
+            winning statement : str
+                The quirky winning statement.
+            ------
+
         """
         statements = [" is deemed worthy of the champion cup.", " jumps to the sky joyfully.", " is pronounced as the winner.", " wins and the crowd goes bonkers.", " is the chosen one.", " gets chicken dinner.", " W I N N E R "]
         random.shuffle(statements)
@@ -78,31 +106,86 @@ class GameState(object):
 
     def getVanillaWinningStatement(self, winstr):
         """
+            Returns a simple win statement.
+
+            Parameters
+            ----------
+            winstr : str
+                String containing the winner's name
+            ----------
+
+            Return
+            ------
+            winning statement : str
+                The winning statement.
+            ------
+
         """
         return winstr + "wins this round."
 
     def getTables(self):
-
         """
+            Getter function for players tables.
+            
+            Return
+            ------
+            (_p1_table, _p2_table) : tuple
+                Tuple containing the two tables of the players.
+            ------
+
         """
         return self._p1_table, self._p2_table
     
     def getHands(self):
-
         """
+            Getter function for players hands.
+
+            Return
+            ------
+            (_p1_hand, _p2_hand) : tuple
+                Tuple containing the two hands of the players.
+            ------
+
         """
         return self._p1_hand, self._p2_hand
 
     def _swap(self):
-
         """
+            Swaps the players hands.
+
+            Return
+            ------
+            (_p1_hand, _p2_hand) : tuple
+                Returns the swapped hands. Notice that no assignment is necessary as swapping is done in-place.
         """
         self._p1_hand, self._p2_hand = self._p2_hand, self._p1_hand
         return self._p1_hand, self._p2_hand
 
     def play(self, p1_move, p2_move):
         """
+            Plays the two moves the players played.
 
+            Parameters
+            ----------
+            p1_move : str
+                The card selected by player 1.
+            p2_move : str
+                The card selected by player 2.
+            ----------
+
+            Local Variables
+            ---------------
+            p1_valid : bool -> default(False)
+                Flag for a valid player 1 move. Set after checking is done to verify a valid p1 move.
+            p2_valid : bool -> default(False)
+                Flag for a valid player 2 move. Set after checking is done to verify a valid p2 move.
+            p1_spoon : bool -> default(False)
+                Flag for a valid player 1 spoon swap. Set after checking is done to verify a valid p1 spoon swap.
+            p2_spoon : bool -> default(False)
+                Flag for a valid player 2 spoon swap. Set after checking is done to verify a valid p2 spoon swap.
+            card : str
+                Temporary variables for holding played card in current move.
+            ---------------
         """
         p1_valid, p2_valid = False, False
         p1_spoon, p2_spoon = False, False
@@ -122,17 +205,21 @@ class GameState(object):
 
         if p1_valid and p2_valid:
             if p1_spoon:
+
                 #perform a chopstick swap
                 #remove chopstick from p1 table
                 self._removeFromP1Table('Chopsticks')
+
                 #add chopstick to p1 hand
                 self._addToP1Hand('Chopsticks')
+
                 #remove the two cards from p1 hand
                 card1 = p1_move[1][0]
                 card2 = p1_move[1][1]
 
                 self._removeFromP1Hand(card1)
                 self._removeFromP1Hand(card2)
+
                 #add two cards into p1 table
                 self._addToP1Table(card1)
                 self._addToP1Table(card2)
@@ -143,6 +230,7 @@ class GameState(object):
                 card1 = p1_move[1]
 
                 self._removeFromP1Hand(card1)
+
                 #add card to p1 table
                 self._addToP1Table(card1)
             
@@ -173,34 +261,58 @@ class GameState(object):
             print("[ ERROR : play() -> invalid play. ]")
 
     def printP1Hand(self):
+        """
+            Prints player 1 hand.
+        """
         print("P1 Hand: ", end="")
         print(self._p1_hand)
 
     def printP2Hand(self):
+        """
+            Prints player 2 hand
+        """
         print("P2 Hand: ", end="")
         print(self._p2_hand)
 
     def printHands(self):
+        """
+            Prints 2 players hands.
+        """
         self.printP1Hand()
         self.printP2Hand()
     
     def printP1Table(self):
+        """
+            Prints player 1's table.
+        """
         print("P1 Table: ", end="")
         print(self._p1_table)
 
     def printP2Table(self):
+        """
+            Prints player 2's table.
+        """
         print("P2 Table: ", end="")
         print(self._p2_table)
 
     def printTable(self):
+        """
+            Prints 2 players tables.
+        """
         print("P1 Table: ", end="")
         print(self._p1_table)
         print("P2 Table: ", end="")
         print(self._p2_table)
 
     def _addToP1Table(self, card):
-
         """
+            Adds card to player 1's table.
+
+            Parameters
+            ----------
+            card : str
+                The card to be added to the player 1's table.
+            ----------
         """
         if self._p1_table.count('Wasabi') > 0 and 'Nigiri' in card:
             self._p1_table.remove('Wasabi')
@@ -209,8 +321,14 @@ class GameState(object):
             self._p1_table.append(card)
 
     def _addToP2Table(self, card):
-
         """
+            Adds card to player 2's table.
+
+            Parameters
+            ----------
+            card : str
+                The card to be added to the player 2's table.
+            ----------
         """
         if self._p2_table.count('Wasabi') > 0 and 'Nigiri' in card:
             self._p2_table.remove('Wasabi')
@@ -220,40 +338,80 @@ class GameState(object):
 
     def _addToP1Hand(self, card):
         """
+            Adds card to player 1's hand.
+
+            Parameters
+            ----------
+            card : str
+                The card to be added to the player 1's hand.
+            ----------  
         """
         self._p1_hand.append(card)
 
     def _addToP2Hand(self, card):
         """
+            Adds card to player 2's hand.
+
+            Parameters
+            ----------
+            card : str
+                The card to be added to the player 2's hand.
+            ----------
         """
         self._p2_hand.append(card)
     
     def _removeFromP1Hand(self, card):
         """
+            Removes card from player 1's hand.
+
+            Parameters
+            ----------
+            card : str
+                The card to be removed from player 1's hand.
+            ----------
         """
         self._p1_hand.remove(card)
     
     def _removeFromP2Hand(self, card):
         """
+            Removes card from player 2's hand.
+
+            Parameters
+            ----------
+            card : str
+                The card to be removed from player 2's hand.
+            ----------
         """
         self._p2_hand.remove(card)
 
     def _removeFromP1Table(self, card):
         """
+            Removes card from player 1's table.
+
+            Parameters
+            ----------
+            card : str
+                The card to be removed from player 1's table.
+            ----------
         """
         self._p1_table.remove(card)
     
     def _removeFromP2Table(self, card):
         """
+            Removes card from player 2's table.
+
+            Parameters
+            ----------
+            card : str
+                The card to be removed from player 2's table.
+            ----------
         """
         self._p2_table.remove(card)
 
     def _evalScores(self):
-
         """
-
+            Calculates the scores of both players based on their tables.
         """
-
         p1_total, p1_maki = 0, 0
         p2_total, p2_maki = 0, 0
         p1_table, p2_table = self._p1_table, self._p2_table
@@ -315,13 +473,27 @@ class GameState(object):
 
 def findP2BestMove(G, alpha, beta):
         """
+            Finds the best move for player 2(computer).
+
+            Parameters
+            ----------
+            G : GameState obj
+                The current GameState object.
+            alpha : int
+                The value of alpha for minmax with alpha-beta pruning.
+            beta : int
+                The value of beta for minmax with alpha-beta pruning.
+            ----------
+            
         """
         p1_hand, p2_hand = G.getHands()
         p1_table, p2_table = G.getTables()
 
         #If there is only one card to play, play it.
         if len(p2_hand) == 1:
+            #get a copy of the gamestate
             H = deepcopy(G)
+            #play the only remaining card
             H.play([0,p1_hand[0]],[0,p2_hand[0]])
             return [0,p2_hand[0]], H._evalScores()
 

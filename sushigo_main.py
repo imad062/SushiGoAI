@@ -10,9 +10,6 @@ def main():
         game_mode = input("1. Human vs Human, 2. Human vs Robot: ")
 
     while not(G.finished()):
-        print(G.finished())
-        print(len(G._p1_hand))
-        print(len(G._p2_hand))
 
         p1_hand, p2_hand = G.getHands()
         p1_table, p2_table = G.getTables()
@@ -78,7 +75,6 @@ def main():
     print ("p1's table: " + str(p1_table) + '\n')
     print ("p2's table: " + str(p2_table) + '\n')
 
-    
     p1_score, p2_score = G.getTotalScores()
     if p1_score > p2_score:
         print(G.getWinningStatement("P1"))
